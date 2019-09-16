@@ -13,12 +13,11 @@ const Articles = ({
   handleFollow,
   handleUnfollow,
   location,
-  isFollowing: {client, server}
+  isFollowing: { client, server }
 }) => {
   const [articles, setArticles] = useState([]);
   const { channel } = location.state;
-  console.log('client: ', client)
-  console.log('server: ', server)
+
   const addArticle = data => {
     setArticles(articles => articles.concat(data));
   };
@@ -51,9 +50,6 @@ const Articles = ({
       });
   }, [channel]);
 
-  
-
-
   return (
     <Fragment>
       <Flex
@@ -71,7 +67,7 @@ const Articles = ({
         >
           {channel} channel
         </Heading>
-        {(!server && !client) && (
+        {!server && !client && (
           <Button
             color="rgb(230, 82, 138)"
             fontSize=".8rem"
@@ -81,7 +77,7 @@ const Articles = ({
             Follow
           </Button>
         )}
-        {client || server && (
+        {(client || server) && (
           <Button
             color="#fff"
             bg="rgb(230, 82, 138)"
@@ -96,9 +92,9 @@ const Articles = ({
           20 Followers
         </Text>
       </Flex>
-      
+
       {/* TODO: Add no content available if no articles found */}
-      
+
       {articles &&
         articles.map((article, index) => (
           <Stack
@@ -141,7 +137,7 @@ Articles.propTypes = {
   handleUnfollow: func.isRequired,
   location: shape({}).isRequired,
   history: shape({}).isRequired,
-  isFollowing: bool.isRequired
+  isFollowing: shape({ client: bool, server: bool }).isRequired
 };
 
 export default Articles;

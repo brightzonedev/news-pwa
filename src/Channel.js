@@ -40,7 +40,7 @@ const Channel = ({ location, history }) => {
   };
 
   const handleFollow = () => {
-    setIsFollowing(true);
+    setIsFollowing({ client: true, server: false });
     toast({
       description: "You followed this channel.",
       status: "success",
@@ -56,7 +56,7 @@ const Channel = ({ location, history }) => {
   };
 
   const handleUnfollow = () => {
-    setIsFollowing(false);
+    setIsFollowing({ client: false, server: false });
     toast({
       description: "You unfollowed this channel.",
       status: "success",
