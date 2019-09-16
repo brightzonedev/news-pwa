@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import { Flex } from "@chakra-ui/core";
 
-import { AuthContext } from "./AuthProvider";
+import { AuthContext } from "./context/AuthProvider";
 import Loader from "./components/Loader/Loader";
 import bgImage from "./images/bg.png";
 import splashLogo from "./images/splash_logo.png";

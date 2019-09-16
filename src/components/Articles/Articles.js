@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
 import { bool, func } from "prop-types";
 import { Stack, Flex, Box, Button, Text, Heading } from "@chakra-ui/core";
 
@@ -13,11 +13,12 @@ const Articles = ({
   handleFollow,
   handleUnfollow,
   location,
-  isFollowing
+  isFollowing: {client, server}
 }) => {
   const [articles, setArticles] = useState([]);
   const { channel } = location.state;
-  console.log(location);
+  console.log('client: ', client)
+  console.log('server: ', server)
   const addArticle = data => {
     setArticles(articles => articles.concat(data));
   };
@@ -50,6 +51,9 @@ const Articles = ({
       });
   }, [channel]);
 
+  
+
+
   return (
     <Fragment>
       <Flex
@@ -67,7 +71,7 @@ const Articles = ({
         >
           {channel} channel
         </Heading>
-        {!isFollowing && (
+        {(!server && !client) && (
           <Button
             color="rgb(230, 82, 138)"
             fontSize=".8rem"
@@ -77,7 +81,7 @@ const Articles = ({
             Follow
           </Button>
         )}
-        {isFollowing && (
+        {client || server && (
           <Button
             color="#fff"
             bg="rgb(230, 82, 138)"

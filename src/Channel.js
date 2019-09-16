@@ -1,23 +1,31 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { shape } from "prop-types";
 import { useToast } from "@chakra-ui/core";
 
-import { AuthContext } from "./AuthProvider";
+import { AuthContext } from "./context/AuthProvider";
 import { db, arrayField } from "./utils/firebase";
 import Articles from "./components/Articles/Articles";
 import Article from "./components/Article/Article";
 import Nav from "./components/Nav/Nav";
 import { StoreContext } from "./context/Store";
+import { FollowingContext } from "./context/FollowingProvider";
 
 const Channel = ({ location, history }) => {
   const [article, setArticle] = useState(null);
-  const { channel, following } = location.state;
-  const [isFollowing, setIsFollowing] = useState(following);
+  const { channel } = location.state;
+  const [isFollowing, setIsFollowing] = useState({
+    client: false,
+    server: false
+  });
   const user = useContext(AuthContext);
-  const appState = useContext(StoreContext);
+  const {
+    cachedFollowingChannels,
+    followChannel,
+    unfollowChannel
+  } = useContext(StoreContext);
+  const { followingChannels } = useContext(FollowingContext);
   const toast = useToast();
-  
-  console.log(appState)
+
   const handleArticleClick = article => {
     setArticle(article);
   };
@@ -40,7 +48,7 @@ const Channel = ({ location, history }) => {
       isClosable: true
     });
 
-    appState.followChannel(channel);
+    followChannel(channel);
     const docRef = db.collection("users").doc(user.uid);
     docRef.update({
       following: arrayField.FieldValue.arrayUnion(channel)
@@ -55,11 +63,20 @@ const Channel = ({ location, history }) => {
       duration: 3000,
       isClosable: true
     });
+
+    unfollowChannel(channel);
     const docRef = db.collection("users").doc(user.uid);
     docRef.update({
       following: arrayField.FieldValue.arrayRemove(channel)
     });
   };
+
+  useEffect(() => {
+    setIsFollowing({
+      server: !!followingChannels.find(i => i === channel),
+      client: !!cachedFollowingChannels.find(i => i === channel)
+    });
+  }, []);
 
   if (!!article) {
     return (

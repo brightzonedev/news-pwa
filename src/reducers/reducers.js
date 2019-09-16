@@ -8,7 +8,10 @@ const followChannel = (channel, state) => {
 };
 
 const unfollowChannel = (channel, state) => {
-  return;
+  const newChannels = [...state, channel];
+  console.log('state: ', state);
+  console.log('channel: ', channel);
+  return newChannels;
 };
 
 export const followingReducer = (state, action) => {
@@ -16,7 +19,7 @@ export const followingReducer = (state, action) => {
     case types.FOLLOW:
       return followChannel(action.channel, state);
     case types.UNFOLLOW:
-      return unfollowChannel(action.channel);
+      return unfollowChannel(action.channel, state);
     default:
       return state;
   }

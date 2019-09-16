@@ -5,21 +5,20 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/core";
 
 import Channels from "../../config/channels";
 import AppShell from "../AppShell/AppShell";
-import { FollowingContext } from "../../FollowingProvider";
+import { FollowingContext } from "../../context/FollowingProvider";
 import Loader from "../../components/Loader/Loader";
 import { StoreContext } from "../../context/Store";
 
 // Read related comments in Explore.js
 const Following = ({ history, match }) => {
   // followingChannels comes from network request
-  const followingChannels = useContext(FollowingContext);
+  const { followingChannels, loading } = useContext(FollowingContext);
   const [intersection, setIntersection] = useState([]);
-  const appState = useContext(StoreContext);
   // cachedFollowingChannels is only client side for optimistic UI and offline use
-  const cachedFollowingChannels = appState.followingChannels;
+  const { cachedFollowingChannels } = useContext(StoreContext);
   // allFollowingChannels is cachedFollowingChannels & followingChannels merged
   const allFollowingChannels = [
-    ...followingChannels.followingChannels,
+    ...followingChannels,
     ...cachedFollowingChannels
   ];
 
@@ -28,7 +27,6 @@ const Following = ({ history, match }) => {
       pathname: `${match.url}/${channel.link}`,
       state: {
         channel: channel.name,
-        following: !!followingChannels.find(i => i === channel.name),
         background: channel.background
       }
     });
@@ -56,7 +54,6 @@ const Following = ({ history, match }) => {
     }
   }, [cachedFollowingChannels]); */
 
-
   useEffect(() => {
     if (allFollowingChannels.length) {
       const common = Channels.filter(
@@ -71,9 +68,11 @@ const Following = ({ history, match }) => {
       <AppShell />
 
       <Flex justify={intersection.length ? "flex-start" : "center"} wrap="wrap">
-        {followingChannels.loading && <Loader my={10} color="rgb(230, 82, 138)" />}
+        {loading && (
+          <Loader my={10} color="rgb(230, 82, 138)" />
+        )}
 
-        {!followingChannels.loading && !allFollowingChannels.length && (
+        {!loading && !allFollowingChannels.length && (
           <Text color="#000" my={10}>
             You are not following any channels yet.
           </Text>
@@ -87,7 +86,6 @@ const Following = ({ history, match }) => {
               pos="relative"
               onClick={() => onChannelClick(channel)}
             >
-              {console.log(channel)}
               <img src={channel.thumbnail} alt={channel.name} width="100%" />
               <Heading
                 as="h3"

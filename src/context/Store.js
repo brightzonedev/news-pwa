@@ -1,15 +1,17 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useContext, useReducer } from "react";
 
 import { followingReducer } from "../reducers/reducers";
 import { FOLLOW, UNFOLLOW } from "../reducers/types";
+import { FollowingContext } from "./FollowingProvider";
 
 export const StoreContext = createContext();
 
 const Store = ({ children }) => {
-  const [followingChannels, setFollowingChannels] = useReducer(
+  const [cachedFollowingChannels, setFollowingChannels] = useReducer(
     followingReducer,
     []
   );
+  const following = useContext(FollowingContext);
 
   const followChannel = channel => {
     setFollowingChannels({ type: FOLLOW, channel });
@@ -21,7 +23,7 @@ const Store = ({ children }) => {
   return (
     <StoreContext.Provider
       value={{
-        followingChannels,
+        cachedFollowingChannels,
         followChannel,
         unfollowChannel
       }}
