@@ -3,18 +3,21 @@ import { shape } from "prop-types";
 import { useToast } from "@chakra-ui/core";
 
 import { AuthContext } from "./AuthProvider";
-import { db, arrayField } from "../utils/firebase";
-import Articles from "../components/Articles/Articles";
-import Article from "../components/Article/Article";
-import Nav from "../components/Nav/Nav";
+import { db, arrayField } from "./utils/firebase";
+import Articles from "./components/Articles/Articles";
+import Article from "./components/Article/Article";
+import Nav from "./components/Nav/Nav";
+import { StoreContext } from "./context/Store";
 
 const Channel = ({ location, history }) => {
   const [article, setArticle] = useState(null);
   const { channel, following } = location.state;
   const [isFollowing, setIsFollowing] = useState(following);
   const user = useContext(AuthContext);
+  const appState = useContext(StoreContext);
   const toast = useToast();
-
+  
+  console.log(appState)
   const handleArticleClick = article => {
     setArticle(article);
   };
@@ -36,6 +39,8 @@ const Channel = ({ location, history }) => {
       duration: 3000,
       isClosable: true
     });
+
+    appState.followChannel(channel);
     const docRef = db.collection("users").doc(user.uid);
     docRef.update({
       following: arrayField.FieldValue.arrayUnion(channel)

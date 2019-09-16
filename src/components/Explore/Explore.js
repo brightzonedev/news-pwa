@@ -4,7 +4,7 @@ import { shape } from "prop-types";
 import { Flex, Box, Heading } from "@chakra-ui/core";
 
 import Channels from "../../config/channels";
-import { FollowingContext } from "../../containers/FollowingProvider";
+import { FollowingContext } from "../../FollowingProvider";
 import AppShell from "../AppShell/AppShell";
 
 const Explore = ({ match }) => {
@@ -29,7 +29,7 @@ const Explore = ({ match }) => {
                 pathname: `${match.url}/${channel.link}`,
                 state: {
                   channel: channel.name,
-                  following: !!followingChannels.find(i => i === channel.name),
+                  following: !!followingChannels.followingChannels.find(i => i === channel.name),
                   background: channel.background
                 }
               }}

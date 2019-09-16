@@ -3,10 +3,10 @@ import { Redirect } from "react-router-dom";
 import { Flex } from "@chakra-ui/core";
 
 import { AuthContext } from "./AuthProvider";
-import Loader from "../components/Loader/Loader";
-import bgImage from "../images/bg.png";
-import splashLogo from "../images/splash_logo.png";
-import { app } from "../utils/firebase";
+import Loader from "./components/Loader/Loader";
+import bgImage from "./images/bg.png";
+import splashLogo from "./images/splash_logo.png";
+import { app } from "./utils/firebase";
 
 const LoadingScreen = () => {
   const user = useContext(AuthContext);

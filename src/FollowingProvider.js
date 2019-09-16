@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 
-import { db } from "../utils/firebase";
+import { db } from "./utils/firebase";
 import { AuthContext } from "./AuthProvider";
 
 export const FollowingContext = createContext();
@@ -8,17 +8,19 @@ export const FollowingContext = createContext();
 export const FollowingProvider = ({ children }) => {
   const user = useContext(AuthContext);
   const [followingChannels, setFollowingChannels] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
       const docRef = db.collection("users").doc(user.uid);
-  
+
       docRef
         .get()
         .then(doc => {
           if (doc.exists) {
             const data = doc.data().following;
             setFollowingChannels(data);
+            setLoading(false);
           } else {
             docRef.set({
               following: []
@@ -32,7 +34,12 @@ export const FollowingProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <FollowingContext.Provider value={followingChannels}>
+    <FollowingContext.Provider
+      value={{
+        followingChannels,
+        loading
+      }}
+    >
       {children}
     </FollowingContext.Provider>
   );
