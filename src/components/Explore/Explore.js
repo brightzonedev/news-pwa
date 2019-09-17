@@ -16,7 +16,6 @@ const Explore = ({ match }) => (
     <Nav />
     <Box h="100vh" {...background}>
       <Menu />
-
       <Flex justify="center" wrap="wrap">
         {Channels.map((channel, index) => (
           <Box key={index} flexBasis="50%" pos="relative">

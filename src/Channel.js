@@ -1,15 +1,22 @@
-import React, { Fragment, lazy, Suspense, useContext, useEffect, useState } from "react";
+import React, {
+  Fragment,
+  lazy,
+  Suspense,
+  useContext,
+  useEffect,
+  useState
+} from "react";
 import { shape } from "prop-types";
 import { useToast } from "@chakra-ui/core";
 
 import { AuthContext } from "./context/AuthProvider";
 import { db, arrayField } from "./utils/firebase";
-// import Articles from "./components/Articles/Articles";
 import Article from "./components/Article/Article";
 import Nav from "./components/Nav/Nav";
 import { StoreContext } from "./context/Store";
+import Loader from "./components/Loader/Loader";
 
-const Articles = lazy(() => import('./components/Articles/Articles'));
+const Articles = lazy(() => import("./components/Articles/Articles"));
 
 const Channel = ({ location, history }) => {
   const [article, setArticle] = useState(null);
@@ -118,7 +125,7 @@ const Channel = ({ location, history }) => {
   return (
     <Fragment>
       <Nav button="chevron-left" handleNavClick={handleNavClick} />
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loader type="content-loader" />}>
         <Articles
           articles={articles}
           handleArticleClick={handleArticleClick}
@@ -129,7 +136,6 @@ const Channel = ({ location, history }) => {
           isFollowing={isFollowing}
         />
       </Suspense>
-      
     </Fragment>
   );
 };
