@@ -64,9 +64,7 @@ const Article = ({ article, channel }) => {
           {channel}
         </Badge>
       </Flex>
-      <Text fontSize="1rem" mx={5} my={4}>
-        {article.data.content}
-      </Text>
+      <Text fontSize="1rem" mx={5} my={4} dangerouslySetInnerHTML={{"__html": `${article.data.content}`}} />
     </Fragment>
   );
 };

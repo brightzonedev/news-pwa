@@ -1,11 +1,8 @@
-import React from "react";
-
 import LoadingScreen from "./LoadingScreen";
-import Following from "../components/Following/Following";
-import Explore from "../components/Explore/Explore";
+import Following from "./components/Following/Following";
+import Explore from "./components/Explore/Explore";
 import Channel from "./Channel";
-
-const ComingSoon = () => <p>Coming soon...</p>;
+import Popular from "./components/Popular/Popular";
 
 export default [
   {
@@ -40,7 +37,7 @@ export default [
   {
     path: "/popular",
     exact: true,
-    component: ComingSoon,
+    component: Popular,
     private: true
   }
 ];

@@ -1,26 +1,21 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { bool, func } from "prop-types";
+import React, { Fragment } from "react";
+import { arrayOf, bool, func } from "prop-types";
 import { Stack, Flex, Box, Button, Text, Heading } from "@chakra-ui/core";
 
-import { db } from "../../utils/firebase";
 import { formatDate } from "../../utils/helpers";
 import Source from "../../images/icon_list_source@2x.png";
 import Time from "../../images/icon_list_time@2x.png";
 import { shape } from "prop-types";
 
 const Articles = ({
+  articles,
   handleArticleClick,
   handleFollow,
   handleUnfollow,
   location,
   isFollowing
 }) => {
-  const [articles, setArticles] = useState([]);
   const { channel } = location.state;
-  console.log(location);
-  const addArticle = data => {
-    setArticles(articles => articles.concat(data));
-  };
 
   const background = {
     backgroundImage: `url(${location.state.background})`,
@@ -28,27 +23,6 @@ const Articles = ({
     bgPos: "top left",
     backgroundRepeat: "no-repeat"
   };
-
-  useEffect(() => {
-    // Check in realtime for any article changes like add or remove
-    db.collection("articles")
-      .where("channel", "==", channel)
-      .onSnapshot({ includeMetadataChanges: true }, snapshot => {
-        snapshot.docChanges().forEach(change => {
-          let data = change.doc.data();
-          const id = change.doc.id;
-          data = { data, id };
-          if (change.type === "added") {
-            addArticle(data);
-          }
-          if (change.type === "removed") {
-            // TODO: create remove function
-          }
-          const source = snapshot.metadata.fromCache ? "local cache" : "server";
-          console.log("Data came from " + source);
-        });
-      });
-  }, [channel]);
 
   return (
     <Fragment>
@@ -61,7 +35,7 @@ const Articles = ({
       >
         <Heading
           textTransform="uppercase"
-          fontSize="1.5rem"
+          fontSize="1.4rem"
           fontWeight="bold"
           color="#fff"
         >
@@ -92,9 +66,9 @@ const Articles = ({
           20 Followers
         </Text>
       </Flex>
-      
+
       {/* TODO: Add no content available if no articles found */}
-      
+
       {articles &&
         articles.map((article, index) => (
           <Stack
@@ -131,7 +105,12 @@ const Articles = ({
   );
 };
 
+Articles.defaultProps = {
+  articles: []
+};
+
 Articles.propTypes = {
+  articles: arrayOf(shape({})),
   handleArticleClick: func.isRequired,
   handleFollow: func.isRequired,
   handleUnfollow: func.isRequired,
