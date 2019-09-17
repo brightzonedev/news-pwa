@@ -8,15 +8,15 @@ import bgImage from "./images/bg.png";
 import splashLogo from "./images/splash_logo.png";
 import { app } from "./utils/firebase";
 
+export const background = {
+  backgroundImage: `url(${bgImage})`,
+  backgroundSize: "cover",
+  bgPos: "center",
+  backgroundRepeat: "no-repeat"
+};
+
 const LoadingScreen = () => {
   const user = useContext(AuthContext);
-
-  const background = {
-    backgroundImage: `url(${bgImage})`,
-    backgroundSize: "cover",
-    bgPos: "center",
-    backgroundRepeat: "no-repeat"
-  };
 
   useEffect(user => {
     if (!user) {

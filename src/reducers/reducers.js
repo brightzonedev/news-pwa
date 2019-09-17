@@ -1,25 +1,20 @@
-import * as types from './types';
+import * as types from "./types";
 
-const followChannel = (channel, state) => {
-  const newChannels = [...state, channel];
-  console.log('state: ', state);
-  console.log('channel: ', channel);
-  return newChannels;
-};
+const followChannel = (channel, followingChannels, state) => [
+  ...state,
+  ...followingChannels,
+  channel
+];
 
-const unfollowChannel = (channel, state) => {
-  const newChannels = [...state, channel];
-  console.log('state: ', state);
-  console.log('channel: ', channel);
-  return newChannels;
-};
+const unfollowChannel = (channel, allFollowingChannels) =>
+  allFollowingChannels.filter(i => i !== channel);
 
 export const followingReducer = (state, action) => {
   switch (action.type) {
     case types.FOLLOW:
-      return followChannel(action.channel, state);
+      return followChannel(action.channel, action.followingChannels, state);
     case types.UNFOLLOW:
-      return unfollowChannel(action.channel, state);
+      return unfollowChannel(action.channel, action.allFollowingChannels);
     default:
       return state;
   }

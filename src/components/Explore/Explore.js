@@ -1,25 +1,21 @@
-import React, { Fragment, useContext } from "react";
+import React from "react";
 import { withRouter, Link } from "react-router-dom";
 import { shape } from "prop-types";
 import { Flex, Box, Heading } from "@chakra-ui/core";
 
 import Channels from "../../config/channels";
-import { FollowingContext } from "../../context/FollowingProvider";
-import AppShell from "../AppShell/AppShell";
+import Nav from "../Nav/Nav";
+import { background } from "../../LoadingScreen";
+import Menu from "../Menu/Menu";
 
-const Explore = ({ match }) => {
-  const { followingChannels } = useContext(FollowingContext);
+const Explore = ({ match }) => (
+  // Unless I have to, I generally don't pass anything to the URL's state.
+  // This time it is done for the sake of simplicity. :)
 
-  return (
-    // followingList is array of channels user follows
-    // It get generated inside Home.js and gets drilled through here
-    // in a real world app I might have tried passing it to state management's store
-    // doing that would also allow me to use it inside Channel.js instead of passing it
-    // to the history's state. Same for the channel and background.
-    // Unless I have to, I generally don't pass anything to the URL's state.
-
-    <Fragment>
-      <AppShell />
+  <Flex direction="column">
+    <Nav />
+    <Box h="100vh" {...background}>
+      <Menu />
 
       <Flex justify="center" wrap="wrap">
         {Channels.map((channel, index) => (
@@ -29,7 +25,6 @@ const Explore = ({ match }) => {
                 pathname: `${match.url}/${channel.link}`,
                 state: {
                   channel: channel.name,
-                  // following: !!followingChannels.find(i => i === channel.name),
                   background: channel.background
                 }
               }}
@@ -51,9 +46,9 @@ const Explore = ({ match }) => {
           </Box>
         ))}
       </Flex>
-    </Fragment>
-  );
-};
+    </Box>
+  </Flex>
+);
 
 Explore.propTypes = {
   match: shape({})

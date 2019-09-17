@@ -6,40 +6,37 @@ import AuthProvider from "./context/AuthProvider";
 import routes from "./routes";
 import PrivateRoute from "./PrivateRoute";
 import LoadingScreen from "./LoadingScreen";
-import FollowingProvider from "./context/FollowingProvider";
 import Store from "./context/Store";
 
 const App = () => (
   <ThemeProvider theme={theme}>
     <CSSReset />
     <AuthProvider>
-      <FollowingProvider>
-        <Store>
-          <Router>
-            <Suspense fallback={<LoadingScreen />}>
-              <Switch>
-                {routes.map(({ private: isPrivate, path, exact, component }) =>
-                  isPrivate ? (
-                    <PrivateRoute
-                      key={path}
-                      path={path}
-                      exact={exact}
-                      component={component}
-                    />
-                  ) : (
-                    <Route
-                      key={path}
-                      path={path}
-                      exact={exact}
-                      component={component}
-                    />
-                  )
-                )}
-              </Switch>
-            </Suspense>
-          </Router>
-        </Store>
-      </FollowingProvider>
+      <Store>
+        <Router>
+          <Suspense fallback={<LoadingScreen />}>
+            <Switch>
+              {routes.map(({ private: isPrivate, path, exact, component }) =>
+                isPrivate ? (
+                  <PrivateRoute
+                    key={path}
+                    path={path}
+                    exact={exact}
+                    component={component}
+                  />
+                ) : (
+                  <Route
+                    key={path}
+                    path={path}
+                    exact={exact}
+                    component={component}
+                  />
+                )
+              )}
+            </Switch>
+          </Suspense>
+        </Router>
+      </Store>
     </AuthProvider>
   </ThemeProvider>
 );
